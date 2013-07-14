@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "Generating Ethernet MAC Address..."
+
+MAC=`(date; cat /proc/interrupts) | md5sum | sed -r 's/^(.{8}).*$/\1/; s/([0-9a-f]{2})/\1:/g; s/:$//;'`
+
+ifconfig wlan0 down
+echo "Setting up device..."
+ifconfig wlan0 hw ether "0e:1f:"$MAC
+if [[ $? == 0 ]]
+    then echo "MAC : "0e:1f:"$MAC"
+else
+    echo "Problem with 0e:1f:$MAC"
+fi
+ifconfig wlan0 up
+
